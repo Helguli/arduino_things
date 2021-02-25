@@ -38,19 +38,19 @@ void controlChange(byte channel, byte control, byte value) {
 void loop() {
     for (int i = 0; i < NUM_OF_DRUMS; i++) {
         int16_t prev_ad_value = ad_values[i];
-        int16_t ad_value = analogRead(drum_pins[i]) - 512;
+        int16_t ad_value = analogRead(drum_pins[i]);
         ad_value = abs(ad_value);
         prev_ad_values[i] = prev_ad_value;
         ad_values[i] = ad_value;
-        if (ad_value > 50 && prev_ad_value <= ad_value && signal_detected[i] == 0) {
-            signal_detected[i] = 200;
+        if (ad_value > 300 && prev_ad_value <= ad_value && signal_detected[i] == 0) {
+            signal_detected[i] = 400;
         }
-        if (signal_detected[i] == 199 && prev_ad_value > ad_value) {
+        if (signal_detected[i] == 399 && prev_ad_value > ad_value) {
             noteOn(9, drum_notes[i], 64);
-            Serial.println(ad_value);
+            Serial.println(prev_ad_value);
             MidiUSB.flush();
         }
-        Serial.println(ad_value);
+//        Serial.println(ad_value);
         if (signal_detected[i]) {
             signal_detected[i] = signal_detected[i] - 1;
         }
