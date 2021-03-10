@@ -48,6 +48,12 @@ Eszközök:
 - 4 db piezo hangszóró (szenzorként használva, a pozitív lába az analóg bemenetre van kötve, negatív lába a földre)  
 - 4 db 1M ellenállás (a szenzorokkal párhuzamosan kell kötni)  
 
+Parancsok, amiket ki kell adni, hogy vegye a számítógép a MIDI jeleket:  
+`sudo modprobe snd_seq_midi`  
+`aseqdump -l`  
+`fluidsynth --server --audio-driver=pulseaudio /usr/share/sounds/sf2/FluidR3_GM.sf2`  
+`aconnect 20 128`
+
 ### 6. Snake
 
 Snake játék Arduino-ra, a 8x8-as LED mátrixszal.
