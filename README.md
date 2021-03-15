@@ -35,16 +35,19 @@ Futófény 9 db LED-del. Egy-egy nyomógombbal lehet beállítani az irányt és
 
 Eszközök:  
 - Arduino UNO  
-- 9 db LED  
+- 9 db LED és ellenállás  
 - 2 db nyomógomb  
 - 1 db potenciométer  
 
 ### 5. MIDI-USB drums
 
-Az Arduino USB-n keresztül küld a számítógépnek MIDI üzenetet, ha érzékeli, hogy valamelyik "dobot" megszólaltatták.
+Az Arduino USB-n keresztül küld a számítógépnek MIDI üzenetet, ha érzékeli, hogy valamelyik "dobot" megszólaltatták. Szekvenszerként is működik. 
 
 Eszközök:  
 - Arduino DUE  
+- 12 db gomb  
+- 128x64 felbontású OLED kijelző  
+- 8 db LED és ellenállás  
 - 4 db piezo hangszóró (szenzorként használva, a pozitív lába az analóg bemenetre van kötve, negatív lába a földre)  
 - 4 db 1M ellenállás (a szenzorokkal párhuzamosan kell kötni)  
 
