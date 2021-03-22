@@ -129,7 +129,7 @@ void switchSampling()
 void piezoSampling()
 {
     //TODO
-    for (int i = 0; i < 1/*NUM_OF_ANALOG_DRUMS*/; i++) 
+    for (int i = 0; i < NUM_OF_ANALOG_DRUMS; i++) 
     {
         int16_t prev_ad_value = ad_values[i];
         int16_t ad_value = analogRead(drum_pins[i]);
@@ -182,6 +182,20 @@ void changeInstrument(uint8_t up)
         digitalWrite(led_pins[i], (led_values[selected_drum] & (1 << (i + 8 * measure_no))) >> (i + 8 * measure_no));
     }
 }
+
+void changeAnalogInstrument(uint8_t up, uint8_t drum_number)
+{
+    if (up)
+    {
+        drums_analog[drum_number]++;
+    }
+    else
+    {
+        drums_analog[drum_number] += NUM_OF_ALL_DRUMS -1;
+    }
+    drums_analog[drum_number] %= NUM_OF_ALL_DRUMS;
+}
+
 
 void changeMeasure(uint8_t up)
 {
@@ -419,6 +433,18 @@ void loop()
                 case 2:
                     changeTempo(0);
                     break;
+                case 3:
+                    changeAnalogInstrument(0, 0);
+                    break;
+                case 4:
+                    changeAnalogInstrument(0, 1);
+                    break;
+                case 5:
+                    changeAnalogInstrument(0, 2);
+                    break;
+                case 6:
+                    changeAnalogInstrument(0, 3);
+                    break;
             }
         }
         else if (button_no == 10)
@@ -433,6 +459,18 @@ void loop()
                     break;
                 case 2:
                     changeTempo(1);
+                    break;
+                case 3:
+                    changeAnalogInstrument(1, 0);
+                    break;
+                case 4:
+                    changeAnalogInstrument(1, 1);
+                    break;
+                case 5:
+                    changeAnalogInstrument(1, 2);
+                    break;
+                case 6:
+                    changeAnalogInstrument(1, 3);
                     break;
             }
         }
