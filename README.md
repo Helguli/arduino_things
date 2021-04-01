@@ -50,6 +50,10 @@ Eszközök:
 - 8 db LED és ellenállás  
 - 4 db piezo hangszóró (szenzorként használva, a pozitív lába az analóg bemenetre van kötve, negatív lába a földre)  
 - 4 db 1M ellenállás (a szenzorokkal párhuzamosan kell kötni)  
+- 3 db fotoellenállás, ezekhez ellenállások  
+- 3 db elektromosságot vezető szivacs, és ezekhez ellenállások  
+- 3 db kapacitív érintőkapcsoló  
+- 2 db SW-520D dőléskapcsoló  
 
 Parancsok, amiket ki kell adni, hogy vegye a számítógép a MIDI jeleket:  
 `sudo modprobe snd_seq_midi`  
