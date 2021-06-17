@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 #define SIZE 8
 #define LEFT 0
 #define UP 1
@@ -11,12 +13,12 @@
 #define START_LENGTH 1500
 #define LOW_THRESHOLD 20
 #define HIGH_THRESHOLD 1002
-#define VRX A4
-#define VRY A5
+#define VRX A5
+#define VRY A4
 #define SW 12
 
 /*
-Snake game for Arduino with an 8x8 LED matrix and a joystick.
+Snake game for Arduino with an 8x8 LED matrix (1588AS) and a joystick.
 
 Connecting
 Arduino pin     Martix pin     Joystick pin 
@@ -38,12 +40,10 @@ A0              C5 (6)
 A1              C6 (11)
 A2              C7 (15)
 A3              C8 (16)
-A4              -               VRX
-A5              -               VRY
+A4              -               VRY
+A5              -               VRX
 
 */
-
-
 
 
 // short led_pins[] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, A0, A1, A2, A3};
@@ -76,6 +76,7 @@ void refresh_screen() {
     for (int row = 0; row < SIZE; row++) {
         digitalWrite(rows[row], HIGH);
         PORTD = screen[row];
+        delayMicroseconds(10);
         PORTD = CLEAR;
         digitalWrite(rows[row], LOW);
     }
@@ -120,7 +121,6 @@ void loop() {
         direction = prev_direction;
     }
 
-    // oke, most mar minden esetben jo parameterekkel kezdi ujra a jatekot gombnyomaskor
     if (!digitalRead(SW)) {
         while(!digitalRead(SW)) {
             delay(10);

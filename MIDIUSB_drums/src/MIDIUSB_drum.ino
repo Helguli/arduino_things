@@ -8,7 +8,7 @@
 
 #define NUM_OF_ALL_DRUMS 33
 #define NUM_OF_ANALOG_DRUMS 10
-#define NUM_OF_DIGITAL_DRUMS 4
+#define NUM_OF_DIGITAL_DRUMS 5
 #define PIEZO_AD_THRESHOLD 300
 #define PIEZO_AD_THRESHOLD_LOW 30
 #define PHOTORESISTOR_DIFFERENCE 70
@@ -31,16 +31,16 @@
 #define FIFTH_LINE 43
 #define SIXTH_LINE 52
 #define LAST_LINE 66
-#define MAX_PAGE 17
+#define MAX_PAGE 18
 
 //int16_t ad_value;
 //int16_t prev_ad_value;
 uint16_t signal_detected[NUM_OF_ANALOG_DRUMS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 const int16_t drum_pins[NUM_OF_ANALOG_DRUMS] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9};
-const int16_t digital_drum_pins[NUM_OF_DIGITAL_DRUMS] = {44, 45, 46, 52};
+const int16_t digital_drum_pins[NUM_OF_DIGITAL_DRUMS] = {44, 45, 46, 52, 53};
 const uint8_t drum_notes_all[NUM_OF_ALL_DRUMS] = {36, 37, 38, 39, 42, 46, 41, 43, 45, 49, 51, 52, 54, 55, 56, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 73, 74, 75, 76, 77, 80, 81};
 uint8_t drums_analog[NUM_OF_ANALOG_DRUMS] = {11, 12, 13, 18, 1, 2, 3, 4, 5, 6};
-uint8_t drums_digital[NUM_OF_DIGITAL_DRUMS] = {1, 2, 3, 21};
+uint8_t drums_digital[NUM_OF_DIGITAL_DRUMS] = {1, 2, 3, 24, 25};
 const char *drum_names_all[NUM_OF_ALL_DRUMS] = {"Kick", "Side Stick", "Snare", "Clap", "Closed Hi-Hat", "Open Hi-Hat", "Low Tom", "Mid Tom", "High Tom", "Crash", "Ride", "Chinese Cymbal", "Tambourine", "Splash", "Cowbell", "High Bongo", "Low Bongo", "Mute High Conga", "Open High Conga", "Low Conga", "High Timbale", "Low Timbale", "High Agogo", "Low Agogo", "Cabasa", "Maracas", "Short Guiro", "Long Guiro", "Claves", "High Wood Block", "Low Wood Block", "Mute Triangle", "Triangle"};
 volatile int16_t ad_values[NUM_OF_ANALOG_DRUMS];
 volatile int16_t prev_ad_values[NUM_OF_ANALOG_DRUMS];
@@ -49,7 +49,7 @@ volatile int8_t prev_digital_values[NUM_OF_DIGITAL_DRUMS];
 const uint16_t sw_tresholds[] = {172, 430, 567, 652, 710, 753, 785, 850, 172, 430, 567, 652};
 volatile uint8_t button_no = 0;
 volatile uint16_t button_pressed = 0;
-const uint8_t led_pins[8] = {22, 23, 24, 25, 26, 27, 28, 29};
+const uint8_t led_pins[8] = {22, 23, 26, 27, 28, 29, 30, 31};
 uint32_t led_values[NUM_OF_ALL_DRUMS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 uint8_t tempo = 125;
 volatile uint8_t fragment_no = 0;
@@ -101,7 +101,7 @@ size_t sendNotes(midiEventPacket_t events[], size_t size)
 	return MidiUSB.write(data, 4 * size);
 }
 
-// Interrupt handler
+// Interrupt for sampling
 void digitalSampling()
 {
     int sensor_value = analogRead(BUTTON_PIN_0);
@@ -154,7 +154,7 @@ void digitalSampling()
     }
 }
 
-// Interrupt handler
+// Interrupt for sampling
 void adSampling()
 {
     for (int i = 0; i < NUM_OF_ANALOG_DRUMS; i++) 
@@ -217,7 +217,7 @@ void adSampling()
     }
 }
 
-// Interrupt handler
+// Interrupt for playing notes
 void playNote()
 {
     for (int i = 0; i < NUM_OF_ALL_DRUMS; i++)
@@ -251,7 +251,6 @@ void updateLeds()
     }
 }
 
-//This function works fine.
 void changeInstrument(uint8_t up)
 {
     if (up)
@@ -266,7 +265,6 @@ void changeInstrument(uint8_t up)
     updateLeds();
 }
 
-// This function works fine too.
 void changeAnalogInstrument(uint8_t up, uint8_t drum_number)
 {
     if (up)
@@ -321,7 +319,6 @@ void changeTempo(uint8_t up)
     drum_timer.setPeriod(fragment_delay).start();
 }
 
-// 
 void draw()
 {
     u8g2.setFont(u8g2_font_5x8_tf);
@@ -619,39 +616,57 @@ void draw()
             u8g2.print(drum_names_all[drums_digital[3]]);
            break;
         case 15:
-            u8g2.print("Drum 10: ");
-            u8g2.print(drum_names_all[drums_analog[9]]);
-            u8g2.setCursor(0, THIRD_LINE);
             u8g2.print("Drum 11: ");
             u8g2.print(drum_names_all[drums_digital[0]]);
-            u8g2.setCursor(0, FOURTH_LINE);
+            u8g2.setCursor(0, THIRD_LINE);
             u8g2.print("Drum 12: ");
             u8g2.print(drum_names_all[drums_digital[1]]);
-            u8g2.setCursor(0, FIFTH_LINE);
+            u8g2.setCursor(0, FOURTH_LINE);
             u8g2.print("# Drum 13: < ");
             u8g2.print(drum_names_all[drums_digital[2]]);
             u8g2.print(">");
-            u8g2.setCursor(0, SIXTH_LINE);
+            u8g2.setCursor(0, FIFTH_LINE);
             u8g2.print("Drum 14: ");
             u8g2.print(drum_names_all[drums_digital[3]]);
+            u8g2.setCursor(0, SIXTH_LINE);
+            u8g2.print("Drum 15: ");
+            u8g2.print(drum_names_all[drums_digital[4]]);
             break;
         case 16:
-            u8g2.print("Drum 10: ");
-            u8g2.print(drum_names_all[drums_analog[9]]);
-            u8g2.setCursor(0, THIRD_LINE);
             u8g2.print("Drum 11: ");
             u8g2.print(drum_names_all[drums_digital[0]]);
-            u8g2.setCursor(0, FOURTH_LINE);
+            u8g2.setCursor(0, THIRD_LINE);
             u8g2.print("Drum 12: ");
             u8g2.print(drum_names_all[drums_digital[1]]);
-            u8g2.setCursor(0, FIFTH_LINE);
+            u8g2.setCursor(0, FOURTH_LINE);
             u8g2.print("Drum 13: ");
             u8g2.print(drum_names_all[drums_digital[2]]);
-            u8g2.setCursor(0, SIXTH_LINE);
+            u8g2.setCursor(0, FIFTH_LINE);
             u8g2.print("# Drum 14: < ");
             u8g2.print(drum_names_all[drums_digital[3]]);
             u8g2.print(">");
+            u8g2.setCursor(0, SIXTH_LINE);
+            u8g2.print("Drum 15: ");
+            u8g2.print(drum_names_all[drums_digital[4]]);
            break;
+        case 17:
+            u8g2.print("Drum 11: ");
+            u8g2.print(drum_names_all[drums_digital[0]]);
+            u8g2.setCursor(0, THIRD_LINE);
+            u8g2.print("Drum 12: ");
+            u8g2.print(drum_names_all[drums_digital[1]]);
+            u8g2.setCursor(0, FOURTH_LINE);
+            u8g2.print("Drum 13: ");
+            u8g2.print(drum_names_all[drums_digital[2]]);
+            u8g2.setCursor(0, FIFTH_LINE);
+            u8g2.print("Drum 14: ");
+            u8g2.print(drum_names_all[drums_digital[3]]);
+            u8g2.setCursor(0, SIXTH_LINE);
+            u8g2.print("# Drum 15: < ");
+            u8g2.print(drum_names_all[drums_digital[4]]);
+            u8g2.print(">");
+           break;
+
     }
     u8g2.setFont(u8g2_font_amstrad_cpc_extended_8f);
     u8g2.setCursor(5, LAST_LINE);
@@ -762,7 +777,7 @@ void loop()
                 case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12:
                     changeAnalogInstrument(0, page - 3);
                     break;
-                case 13: case 14: case 15: case 16:
+                case 13: case 14: case 15: case 16: case 17:
                     changeDigitalInstrument(0, page - 13);
                     break;
             }
@@ -783,7 +798,7 @@ void loop()
                 case 3: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12:
                     changeAnalogInstrument(1, page - 3);
                     break;
-                case 13: case 14: case 15: case 16:
+                case 13: case 14: case 15: case 16: case 17:
                     changeDigitalInstrument(1, page - 13);
                     break;
             }
