@@ -46,7 +46,7 @@ volatile int16_t ad_values[NUM_OF_ANALOG_DRUMS];
 volatile int16_t prev_ad_values[NUM_OF_ANALOG_DRUMS];
 volatile int8_t digital_values[NUM_OF_DIGITAL_DRUMS];
 volatile int8_t prev_digital_values[NUM_OF_DIGITAL_DRUMS];
-const uint16_t sw_tresholds[] = {172, 430, 567, 652, 710, 753, 785, 850, 172, 430, 567, 652};
+const uint16_t sw_tresholds[] = {172, 430, 567, 652, 720, 763, 790, 850, 172, 430, 567, 652};
 volatile uint8_t button_no = 0;
 volatile uint16_t button_pressed = 0;
 const uint8_t led_pins[8] = {22, 23, 26, 27, 28, 29, 30, 31};
@@ -734,7 +734,7 @@ void loop()
                 draw();
             } while (u8g2.nextPage());
     }
-    if (button_no && button_pressed >= 5)
+    if (button_no && button_pressed >= 7)
     {
         // TODO handle button events
         if (button_no < 9)

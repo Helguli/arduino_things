@@ -6,7 +6,7 @@
 #define SERVO_PIN 9
 #define RED_LED_PIN 5
 #define GREEN_LED_PIN 6
-#define OPEN 90
+#define OPEN 120
 #define CLOSE 0
 
 Servo servo;
