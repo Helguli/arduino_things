@@ -16,12 +16,14 @@
 #define VRX A5
 #define VRY A4
 #define SW 12
+#define SND 13
+#define TONE_LENGTH 200
 
 /*
 Snake game for Arduino with an 8x8 LED matrix (1588AS) and a joystick.
 
 Connecting
-Arduino pin     Martix pin     Joystick pin 
+Arduino pin     Martix pin     Joystick pin
 0               R8 (5)
 1               R7 (2)
 2               R6 (7)
@@ -93,7 +95,7 @@ void setup() {
     DDRD = 0xFF;
     PORTD = CLEAR;
     food = ((random(8)) << 8) + random(8);
-    screen[highByte(food)] &= ~(1 << lowByte(food)); 
+    screen[highByte(food)] &= ~(1 << lowByte(food));
    // init();
     snake[snake_head] = START_SNAKE_HEAD;
     snake[snake_tail] = START_SNAKE_TAIL;
@@ -164,10 +166,20 @@ void loop() {
             next_head_coordinates = snake[snake_head]+1;
         } else {
             lost = 1;
+            tone(SND, 880, TONE_LENGTH);
+            delay(TONE_LENGTH);
+            tone(SND, 698, TONE_LENGTH);
+            delay(TONE_LENGTH);
+            tone(SND, 589, TONE_LENGTH);
             return;
         }
         if (!is_free_pixel(next_head_coordinates)) {
             lost = 1;
+            tone(SND, 880, TONE_LENGTH);
+            delay(TONE_LENGTH);
+            tone(SND, 698, TONE_LENGTH);
+            delay(TONE_LENGTH);
+            tone(SND, 589, TONE_LENGTH);
             return;
         }
         screen[highByte(next_head_coordinates)] &= ~(1 << lowByte(next_head_coordinates));
@@ -177,6 +189,7 @@ void loop() {
             while (!is_free_pixel(food)) {
                 food = ((rand()%8) << 8) + rand()%8;
             }
+            tone(SND, 880, TONE_LENGTH);
             // kaja talalaskor gyorsul
             lenth -= 15;
             screen[highByte(food)] &= ~(1 << lowByte(food));
