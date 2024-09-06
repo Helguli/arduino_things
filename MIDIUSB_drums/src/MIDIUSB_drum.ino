@@ -90,15 +90,15 @@ void noteOff(byte pitch, byte velocity)
 
 size_t sendNotes(midiEventPacket_t events[], size_t size)
 {
-	uint8_t data[4 * size];
+    uint8_t data[4 * size];
     for (unsigned int i = 0; i < size; i++)
     {
-	    data[0 + i * 4] = events[i].header;
-	    data[1 + i * 4] = events[i].byte1;
-	    data[2 + i * 4] = events[i].byte2;
-	    data[3 + i * 4] = events[i].byte3;
+        data[0 + i * 4] = events[i].header;
+        data[1 + i * 4] = events[i].byte1;
+        data[2 + i * 4] = events[i].byte2;
+        data[3 + i * 4] = events[i].byte3;
     }
-	return MidiUSB.write(data, 4 * size);
+    return MidiUSB.write(data, 4 * size);
 }
 
 // Interrupt for sampling
@@ -157,7 +157,7 @@ void digitalSampling()
 // Interrupt for sampling
 void adSampling()
 {
-    for (int i = 0; i < NUM_OF_ANALOG_DRUMS; i++) 
+    for (int i = 0; i < NUM_OF_ANALOG_DRUMS; i++)
     {
         int16_t prev_ad_value = ad_values[i];
         int16_t ad_value = analogRead(drum_pins[i]);
