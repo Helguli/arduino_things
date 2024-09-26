@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #define size 8
-#define DELAY 300
+#define DELAY 30
 
 
 short led_pins[] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, A0, A1, A2, A3};
@@ -109,7 +109,7 @@ void setup() {
 void loop() {
     refresh_screen();
     count++;
-    if (count == 1500 - 5 * DELAY + 1) {
+    if (count == (DELAY == 0 ? 1500 : 1)) {
         count = 0;
         state++;
         if (state == anim_length){
