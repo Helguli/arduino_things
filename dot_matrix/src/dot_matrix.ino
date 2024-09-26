@@ -1,4 +1,8 @@
+#include <Arduino.h>
 #define size 8
+#define DELAY 300
+
+
 short led_pins[] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, A0, A1, A2, A3};
 
 short rows[] = {8, 9, 10, 11, A0, A1, A2, A3};//{10, 7, 6, A2, 4, A1, 12, 13};
@@ -9,7 +13,7 @@ typedef byte screen_matrix[size];
 
 short count = 0;
 
-byte anim_length = 33; // animation: 31, heart_anim: 16
+byte anim_length = 16; // animation: 31, heart_anim: 16
 
 const screen_matrix heart PROGMEM = {0x99, 0x00, 0x00, 0x00, 0x81, 0xC3, 0xE7, 0xFF};
 const screen_matrix random_cucc PROGMEM = {0x21, 0x71, 0xA8, 0xD5, 0x82, 0x43, 0x82, 0x76};
@@ -68,7 +72,7 @@ const screen_matrix heart_anim[] PROGMEM = {
     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff}
 };
 
-screen_matrix *picture;
+const screen_matrix *picture;
 
 
 void refresh_screen() {
@@ -84,6 +88,7 @@ void refresh_screen() {
             digitalWrite(columns[column], HIGH);
         }
         */
+        delay(DELAY);
         PORTD = 0xFF;
         digitalWrite(rows[row], LOW);
     }
@@ -97,19 +102,19 @@ void setup() {
         pinMode(columns[i], OUTPUT);
         digitalWrite(columns[i], HIGH);
     }
-    picture = &animation[0];
+    picture = &heart_anim[0];
     DDRD = 0xFF;
 }
 
 void loop() {
     refresh_screen();
     count++;
-    if (count == 1500) {
+    if (count == 1500 - 5 * DELAY + 1) {
         count = 0;
         state++;
         if (state == anim_length){
             state = 0;
         }
-        picture = &animation[state];
+        picture = &heart_anim[state];
     }
 }
